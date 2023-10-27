@@ -5,7 +5,7 @@
       style="height: 400px"
       class="d-flex align-items-center justify-content-center"
     >
-      <img class="img-fluid" :src="'/src/assets/' + img" />
+      <img class="img-fluid" :src="img" />
     </div>
     <div class="row d-flex justify-content-center">
       <div class="col-3">

@@ -74,14 +74,14 @@ watch(mode, async (newMode, oldMode) => {
         <ModeHeader
           id="studyHeader"
           label="실습 시간"
-          img="taxi-multitasking-at-work.png"
+          img="/src/assets/taxi-multitasking-at-work.png"
           v-model="repeat"
           v-if="mode == TimerMode.STUDY"
         />
         <ModeHeader
           id="restHeader"
           label="쉬는 시간"
-          img="taxi-man-tired-of-studying.png"
+          img="/src/assets/taxi-man-tired-of-studying.png"
           v-model="repeat"
           v-else-if="mode == TimerMode.REST"
         />
