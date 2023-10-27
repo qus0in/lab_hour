@@ -2,6 +2,8 @@
 import { computed, ref, watch } from "vue";
 import TimeSetting from "./components/TimeSetting.vue";
 import { TimerMode } from "./util";
+import ModeHeader from "./components/ModeHeader.vue";
+import ProgressBar from "./components/ProgressBar.vue";
 
 const mode = ref(TimerMode.SETTING);
 const repeat = ref(true);
@@ -19,10 +21,10 @@ const timerPercent = computed(() =>
   Number.parseInt(
     (1 -
       timerSeconds.value /
-      (mode.value == TimerMode.REST ? restTimeMinute : studyTimeMinute)
-        .value /
-      60) *
-    100
+        (mode.value == TimerMode.REST ? restTimeMinute : studyTimeMinute)
+          .value /
+        60) *
+      100
   )
 );
 let timerId;
@@ -45,7 +47,7 @@ watch(mode, async (newMode, oldMode) => {
       const audio = new Audio("./clock-alarm-8761.mp3");
       audio.play();
       if (repeat.value) {
-        console.log('반복 계속')
+        // console.log('반복 계속')
         switch (mode.value) {
           case TimerMode.STUDY:
             mode.value = TimerMode.REST;
@@ -55,7 +57,7 @@ watch(mode, async (newMode, oldMode) => {
             break;
         }
       } else {
-        console.log('반복 중지')
+        // console.log('반복 중지')
         mode.value = TimerMode.SETTING;
       }
       return;
@@ -68,80 +70,55 @@ watch(mode, async (newMode, oldMode) => {
 <template>
   <div class="container text-center py-5">
     <header>
-      <!-- TODO : 컴포넌트화 + 클래스 변수화 -->
       <Transition mode="out-in">
-        <div v-if="mode == TimerMode.STUDY">
-          <p class="display-3">실습 시간</p>
-          <div style="height: 400px" class="d-flex align-items-center justify-content-center">
-            <img class="img-fluid" src="/src/assets/taxi-multitasking-at-work.png" />
-          </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-3">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="repeat" />
-                <label class="form-check-label" for="flexSwitchCheckChecked">반복 모드</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else-if="mode == TimerMode.REST">
-          <p class="display-3">쉬는 시간</p>
-          <div style="height: 400px" class="d-flex align-items-center justify-content-center">
-            <img class="img-fluid" src="/src/assets/taxi-man-tired-of-studying.png" />
-          </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-3">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="repeat" />
-                <label class="form-check-label" for="flexSwitchCheckChecked">반복 모드</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <p class="display-3">실습 타이머</p>
-          <div style="height: 400px" class="d-flex align-items-center justify-content-center">
-            <img class="img-fluid" src="/src/assets/taxi-coming-soon-text-with-a-waiting-man-lettering.png" />
-          </div>
-          <div class="row d-flex justify-content-center">
-            <div class="col-3">
-              <div>
-                <div class="form-check form-switch">
-                  <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" v-model="repeat" />
-                  <label class="form-check-label" for="flexSwitchCheckChecked">반복 모드</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ModeHeader
+          id="studyHeader"
+          label="실습 시간"
+          img="taxi-multitasking-at-work.png"
+          v-model="repeat"
+          v-if="mode == TimerMode.STUDY"
+        />
+        <ModeHeader
+          id="restHeader"
+          label="쉬는 시간"
+          img="taxi-man-tired-of-studying.png"
+          v-model="repeat"
+          v-else-if="mode == TimerMode.REST"
+        />
+        <ModeHeader
+          id="settingHeader"
+          label="실습 타이머"
+          img="taxi-coming-soon-text-with-a-waiting-man-lettering.png"
+          v-model="repeat"
+          v-else
+        />
       </Transition>
-
     </header>
     <form>
       <div class="mb-3 row d-flex justify-content-center">
         <Transition mode="out-in">
-          <TimeSetting v-model:studyTimeMinute="studyTimeMinute" v-model:restTimeMinute="restTimeMinute"
-            v-model:mode="mode" v-if="mode === TimerMode.SETTING" />
+          <TimeSetting
+            v-model:studyTimeMinute="studyTimeMinute"
+            v-model:restTimeMinute="restTimeMinute"
+            v-model:mode="mode"
+            v-if="mode === TimerMode.SETTING"
+          />
           <div class="col-9 col-md-6" v-else>
             <p class="display-4 p-4">
               {{ timerMinutesText }}:{{ timerSecondsText }}
             </p>
-            <!-- TODO : 컴포넌트화 -->
-            <div class="progress">
-              <div :class="[
-                'progress-bar',
-                'progress-bar-striped',
-                'progress-bar-animated',
-                mode === TimerMode.REST ? 'bg-success' : 'bg-danger',
-              ]" role="progressbar" :aria-valuenow="timerPercent" aria-valuemin="0" aria-valuemax="100"
-                :style="{ width: timerPercent + '%' }"></div>
-            </div>
+            <ProgressBar :mode="mode" :timerPercent="timerPercent" />
             <div class="row my-4">
               <div class="col">
-                <button type="button" class="btn btn-outline-primary m-2" @click="() => {
-                    mode = TimerMode.SETTING;
-                  }
-                  ">
+                <button
+                  type="button"
+                  class="btn btn-outline-primary m-2"
+                  @click="
+                    () => {
+                      mode = TimerMode.SETTING;
+                    }
+                  "
+                >
                   재설정
                 </button>
               </div>
