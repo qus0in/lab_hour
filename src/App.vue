@@ -41,7 +41,7 @@ watch(mode, async (newMode, oldMode) => {
   timerId = setInterval(() => {
     if (timerSeconds.value == 0) {
       clearInterval(timerId);
-      const audio = new Audio(document.querySelector('#alarm').src)
+      const audio = new Audio('./clock-alarm-8761.mp3')
       audio.play()
       switch (mode.value) {
         case TimerMode.STUDY:
@@ -134,7 +134,6 @@ watch(mode, async (newMode, oldMode) => {
         </Transition>
       </div>
     </form>
-    <audio id="alarm" src="/src/assets/clock-alarm-8761.mp3"></audio>
   </div>
 </template>
 
