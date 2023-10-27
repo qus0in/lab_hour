@@ -41,7 +41,7 @@ watch(mode, async (newMode, oldMode) => {
   timerId = setInterval(() => {
     if (timerSeconds.value == 0) {
       clearInterval(timerId);
-      const audio = new Audio('/src/assets/clock-alarm-8761.mp3')
+      const audio = new Audio(document.querySelector('#alarm').src)
       audio.play()
       switch (mode.value) {
         case TimerMode.STUDY:
@@ -134,13 +134,14 @@ watch(mode, async (newMode, oldMode) => {
         </Transition>
       </div>
     </form>
+    <audio id="alarm" src="/src/assets/clock-alarm-8761.mp3" />
   </div>
 </template>
 
 <style>
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 1s ease;
+  transition: opacity 0.5s ease;
 }
 
 .v-enter-from,
