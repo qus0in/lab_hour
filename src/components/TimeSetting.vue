@@ -2,11 +2,11 @@
     <div class="col-6">
         <div class="row mt-4">
             <div class="col-md p-2">
-                <TimeRange id="studyTimeMinute" label="실습 시간" min="1" max="60" :model-value="studyTimeMinute"
+                <TimeRange id="studyTimeMinute" label="실습 시간" min="1" max="90" :model-value="studyTimeMinute"
                     @change="updateStudyTimeMinute" />
             </div>
             <div class="col-md p-2">
-                <TimeRange id="restTimeMinute" label="쉬는 시간" min="1" max="60" :model-value="restTimeMinute"
+                <TimeRange id="restTimeMinute" label="쉬는 시간" min="1" max="90" :model-value="restTimeMinute"
                     @change="updateRestTimeMinute" />
             </div>
         </div>

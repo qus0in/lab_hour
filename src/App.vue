@@ -44,7 +44,16 @@ watch(mode, async (newMode, oldMode) => {
   timerId = setInterval(() => {
     if (timerSeconds.value == 0) {
       clearInterval(timerId);
-      const audio = new Audio("./clock-alarm-8761.mp3");
+      let alarmPath;
+      switch (mode.value) {
+          case TimerMode.STUDY:
+            alarmPath = './call-to-attention-123107.mp3'
+            break;
+          case TimerMode.REST:
+            alarmPath = './clock-alarm-8761.mp3'
+            break;
+      }
+      const audio = new Audio(alarmPath);
       audio.play();
       if (repeat.value) {
         // console.log('반복 계속')
